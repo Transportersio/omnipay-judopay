@@ -15,18 +15,6 @@ class Gateway extends AbstractGateway
 
     public $judopay;
 
-    public function __construct()
-    {
-        $this->judopay = new Judopay(
-            array(
-                'apiToken' => 'jwmXGbpb87xvDM4B',
-                'apiSecret' => '601dc0a93d2752f5041bdb9a53dc1bf0b4e8ef0f1b03f737416fcf3be1a20b7d',
-                'judoId' => '100826-205',
-                'useProduction' => false
-            )
-        );
-    }
-
     public function getName()
     {
         return 'JudoPay';
@@ -82,8 +70,21 @@ class Gateway extends AbstractGateway
         return $this->setParameter('useProduction', $value);
     }
 
-    public function preAuthorization(array $parameters = array())
+    public function authorize(array $parameters = array())
     {
+
+        echo "Before authorize<br />";
+        $this->judopay = new Judopay(
+            array(
+                'apiToken' => 'jwmXGbpb87xvDM4B',
+                'apiSecret' => '601dc0a93d2752f5041bdb9a53dc1bf0b4e8ef0f1b03f737416fcf3be1a20b7d',
+                'judoId' => '100826-205',
+                'useProduction' => false
+            )
+        );
+
+        echo "After authorize<br />";
+
         $payment = $this->judopay->getModel('Payment');
         $payment->setAttributeValues(
             array(
