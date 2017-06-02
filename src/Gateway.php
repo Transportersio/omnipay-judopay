@@ -74,18 +74,18 @@ class Gateway extends AbstractGateway
     {
 
         echo "Before authorize<br />";
-        $this->judopay = new Judopay(
+        /*$this->judopay = new Judopay(
             array(
                 'apiToken' => 'jwmXGbpb87xvDM4B',
                 'apiSecret' => '601dc0a93d2752f5041bdb9a53dc1bf0b4e8ef0f1b03f737416fcf3be1a20b7d',
                 'judoId' => '100826-205',
                 'useProduction' => false
             )
-        );
+        );*/
 
         echo "After authorize<br />";
 
-        $payment = $this->judopay->getModel('Payment');
+        /*$payment = $this->judopay->getModel('Payment');
         $payment->setAttributeValues(
             array(
                 'judoId' => '100826-205',
@@ -112,7 +112,7 @@ class Gateway extends AbstractGateway
             echo $e->getSummary();
         } catch (\Exception $e) {
             echo $e->getMessage();
-        }
+        }*/
         return "TEST";
         //return $this->createRequest('\Omnipay\JudoPay\Message\PreAuthorization', $parameters);
     }
