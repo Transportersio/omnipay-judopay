@@ -1,8 +1,9 @@
 <?php
 
-namespace Omnipay\WorldPay;
+namespace Omnipay\JudoPay;
 
 use Omnipay\Common\AbstractGateway;
+use Judopay;
 
 /**
  * WorldPay Gateway
@@ -11,140 +12,108 @@ use Omnipay\Common\AbstractGateway;
  */
 class Gateway extends AbstractGateway
 {
+
+    public $judopay;
+
+    public function __construct()
+    {
+        $this->judopay = new Judopay(
+            array(
+                'apiToken' => 'jwmXGbpb87xvDM4B',
+                'apiSecret' => '601dc0a93d2752f5041bdb9a53dc1bf0b4e8ef0f1b03f737416fcf3be1a20b7d',
+                'judoId' => '100826-205',
+                'useProduction' => false
+            )
+        );
+    }
+
     public function getName()
     {
-        return 'WorldPay';
+        return 'JudoPay';
     }
 
     public function getDefaultParameters()
     {
         return array(
-            'installationId' => '',
-            'accountId' => '',
-            'secretWord' => '',
-            'callbackPassword' => '',
-            'testMode' => false,
-            'noLanguageMenu' => false,
-            'fixContact' => false,
-            'hideContact' => false,
-            'hideCurrency' => false,
-            'signatureFields' => 'instId:amount:currency:cartId',
+            'apiToken' => '',
+            'apiSecret' => '',
+            'judoId' => '',
+            'useProduction' => false
         );
     }
 
-    public function getSignatureFields()
+    public function getApiToken()
     {
-        return $this->getParameter('signatureFields');
+        return $this->getParameter('apiToken');
     }
 
-    public function setSignatureFields($value)
+    public function setApiToken($value)
     {
-        return $this->setParameter('signatureFields', $value);
+        return $this->setParameter('apiToken', $value);
     }
 
-    public function getInstallationId()
+    public function getApiSecret()
     {
-        return $this->getParameter('installationId');
+        return $this->getParameter('apiSecret');
     }
 
-    public function setInstallationId($value)
+    public function setApiSecret($value)
     {
-        return $this->setParameter('installationId', $value);
+        return $this->setParameter('apiSecret', $value);
     }
 
-    public function getAccountId()
+    public function getJudoId()
     {
-        return $this->getParameter('accountId');
+        return $this->getParameter('judoId');
     }
 
-    public function setAccountId($value)
+    public function setJudoId($value)
     {
-        return $this->setParameter('accountId', $value);
+        return $this->setParameter('judoId', $value);
     }
 
-    public function getSecretWord()
+    public function getUseProduction()
     {
-        return $this->getParameter('secretWord');
+        return $this->getParameter('useProduction');
     }
 
-    public function setSecretWord($value)
+    public function setUseProduction($value)
     {
-        return $this->setParameter('secretWord', $value);
+        return $this->setParameter('useProduction', $value);
     }
 
-    public function getCallbackPassword()
+    public function preAuthorization(array $parameters = array())
     {
-        return $this->getParameter('callbackPassword');
-    }
+        $payment = $this->judopay->getModel('Payment');
+        $payment->setAttributeValues(
+            array(
+                'judoId' => '100826-205',
+                'yourConsumerReference' => '12345',
+                'yourPaymentReference' => '12345',
+                'amount' => 1.01,
+                'currency' => 'GBP',
+                'cardNumber' => '4976000000003436',
+                'expiryDate' => '12/22',
+                'cv2' => 452
+            )
+        );
 
-    public function setCallbackPassword($value)
-    {
-        return $this->setParameter('callbackPassword', $value);
-    }
-
-    /**
-     * If true, hides WorldPay's language selection menu.
-     *
-     * @param boolean
-     */
-    public function getNoLanguageMenu()
-    {
-        return $this->getParameter('noLanguageMenu');
-    }
-
-    public function setNoLanguageMenu($value)
-    {
-        return $this->setParameter('noLanguageMenu', $value);
-    }
-
-    /**
-     * If true, prevents editing of address details by user.
-     *
-     * @param boolean
-     */
-    public function getFixContact()
-    {
-        return $this->getParameter('fixContact');
-    }
-
-    public function setFixContact($value)
-    {
-        return $this->setParameter('fixContact', $value);
-    }
-
-    /**
-     * If true, hides address details from user.
-     *
-     * @param boolean
-     */
-    public function getHideContact()
-    {
-        return $this->getParameter('hideContact');
-    }
-
-    public function setHideContact($value)
-    {
-        return $this->setParameter('hideContact', $value);
-    }
-
-    /**
-     * If true, hides currency options from user.
-     *
-     * @param boolean
-     */
-    public function getHideCurrency()
-    {
-        return $this->getParameter('hideCurrency');
-    }
-
-    public function setHideCurrency($value)
-    {
-        return $this->setParameter('hideCurrency', $value);
-    }
-
-    public function purchase(array $parameters = array())
-    {
-        return $this->createRequest('\Omnipay\WorldPay\Message\PurchaseRequest', $parameters);
+        try {
+            $response = $payment->create();
+            if ($response['result'] === 'Success') {
+                echo 'Payment succesful';
+            } else {
+                echo 'There were some problems while processing your payment';
+            }
+        } catch (\Judopay\Exception\ValidationError $e) {
+            echo $e->getSummary();
+        } catch (\Judopay\Exception\ApiException $e) {
+            echo $e->getSummary();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+        return "TEST";
+        //return $this->createRequest('\Omnipay\JudoPay\Message\PreAuthorization', $parameters);
     }
 
     public function completePurchase(array $parameters = array())
