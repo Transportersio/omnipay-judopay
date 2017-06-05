@@ -1,31 +1,18 @@
 <?php
 
-namespace Omnipay\JudoPay;
+namespace Omnipay\Judopay;
 
 use Omnipay\Common\AbstractGateway;
 use Judopay;
 
 /**
- * WorldPay Gateway
+ * Judopay Gateway
  *
- * @link http://www.worldpay.com/support/kb/bg/htmlredirect/rhtml.html
  */
 class Gateway extends AbstractGateway
 {
 
     public $judopay;
-
-    public function __construct()
-    {
-        $this->judopay = new Judopay(
-            array(
-                'apiToken' => 'jwmXGbpb87xvDM4B',
-                'apiSecret' => '601dc0a93d2752f5041bdb9a53dc1bf0b4e8ef0f1b03f737416fcf3be1a20b7d',
-                'judoId' => '100826-205',
-                'useProduction' => false
-            )
-        );
-    }
 
     public function getName()
     {
@@ -82,42 +69,33 @@ class Gateway extends AbstractGateway
         return $this->setParameter('useProduction', $value);
     }
 
-    public function preAuthorization(array $parameters = array())
+    public function authorize(array $parameters = array())
     {
-        $payment = $this->judopay->getModel('Payment');
-        $payment->setAttributeValues(
-            array(
-                'judoId' => '100826-205',
-                'yourConsumerReference' => '12345',
-                'yourPaymentReference' => '12345',
-                'amount' => 1.01,
-                'currency' => 'GBP',
-                'cardNumber' => '4976000000003436',
-                'expiryDate' => '12/22',
-                'cv2' => 452
-            )
-        );
-
-        try {
-            $response = $payment->create();
-            if ($response['result'] === 'Success') {
-                echo 'Payment succesful';
-            } else {
-                echo 'There were some problems while processing your payment';
-            }
-        } catch (\Judopay\Exception\ValidationError $e) {
-            echo $e->getSummary();
-        } catch (\Judopay\Exception\ApiException $e) {
-            echo $e->getSummary();
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
-        return "TEST";
-        //return $this->createRequest('\Omnipay\JudoPay\Message\PreAuthorization', $parameters);
+        return $this->createRequest('\Omnipay\Judopay\Message\PreAuthorizationRequest', $parameters);
     }
 
-    public function completePurchase(array $parameters = array())
-    {
-        return $this->createRequest('\Omnipay\WorldPay\Message\CompletePurchaseRequest', $parameters);
+    public function purchase(array $parameters = array()){
+        return $this->createRequest('\Omnipay\Judopay\Message\PaymentRequest', $parameters);
     }
+
+    public function refund(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Judopay\Message\RefundRequest', $parameters);
+    }
+
+    public function void(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Judopay\Message\VoidRequest', $parameters);
+    }
+
+    public function createCard(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Judopay\Message\RegisteringCardRequest', $parameters);
+    }
+
+    public function updateCard(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Judopay\Message\SaveCardRequest', $parameters);
+    }
+
 }

@@ -8,8 +8,9 @@ use Omnipay\Common\Message\RedirectResponseInterface;
 /**
  * Judopay Purchase Response
  */
-class PreAuthorizationResponse extends AbstractResponse implements RedirectResponseInterface
+class PaymentResponse extends AbstractResponse implements RedirectResponseInterface
 {
+
     public function isSuccessful()
     {
         if($this->data['result'] == 'Success'){
@@ -21,13 +22,12 @@ class PreAuthorizationResponse extends AbstractResponse implements RedirectRespo
 
     public function isRedirect()
     {
-        return true;
+        return (isset($this->getRequest()->getParameters()['returnUrl']) && $this->getRequest()->getParameters()['returnUrl'] != '') ? true : false;
     }
 
     public function getRedirectUrl()
     {
-        return true;
-        //return $this->getRequest()->getEndpoint().'?'.http_build_query($this->data);
+        return (isset($this->getRequest()->getParameters()['returnUrl']) && $this->getRequest()->getParameters()['returnUrl'] != '') ? $this->getRequest()->getParameters()['returnUrl'] : false;
     }
 
     public function getRedirectMethod()
@@ -37,6 +37,6 @@ class PreAuthorizationResponse extends AbstractResponse implements RedirectRespo
 
     public function getRedirectData()
     {
-        return null;
+        return $this->getData();
     }
 }

@@ -7,7 +7,7 @@ use Omnipay\Common\Message\AbstractRequest;
 /**
  * Judopay Purchase Request
  */
-class PreAuthorizationRequest extends AbstractRequest
+class PaymentRequest extends AbstractRequest
 {
 
     public function getApiToken()
@@ -70,6 +70,7 @@ class PreAuthorizationRequest extends AbstractRequest
         return $this->setParameter('yourPaymentReference', $value);
     }
 
+
     public function getData()
     {
         $this->validate('amount');
@@ -78,7 +79,7 @@ class PreAuthorizationRequest extends AbstractRequest
         $data['judoId'] = $this->getJudoId();
         $data['yourConsumerReference'] = $this->getYourConsumerReference();
         $data['yourPaymentReference'] = $this->getYourPaymentReference();
-        $data['amount'] = $this->getAmountInteger();
+        $data['amount'] = $this->getAmount();
         $data['currency'] = $this->getCurrency();
         $data['cardNumber'] = $this->getCard()->getNumber();
         $data['expiryDate'] = $this->getCard()->getExpiryDate('m/y');
@@ -98,15 +99,12 @@ class PreAuthorizationRequest extends AbstractRequest
             )
         );
 
-        $preauth = $judopay->getModel('Preauth');
-        $preauth->setAttributeValues($data);
+        $payment = $judopay->getModel('Payment');
+        $payment->setAttributeValues($data);
 
         try {
-            $response = $preauth->create();
-            if ($response['result'] === 'Success') {
-                return $this->createResponse($response);
-            } else {
-            }
+            $response = $payment->create();
+            return $this->createResponse($response);
         } catch (\Judopay\Exception\ValidationError $e) {
             echo $e->getSummary();
         } catch (\Judopay\Exception\ApiException $e) {
@@ -119,6 +117,6 @@ class PreAuthorizationRequest extends AbstractRequest
     }
 
     public function createResponse($response){
-        return $this->response = new PreAuthorizationResponse($this, $response);
+        return $this->response = new PaymentResponse($this, $response);
     }
 }

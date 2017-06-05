@@ -7,7 +7,7 @@ use Omnipay\Common\Message\AbstractRequest;
 /**
  * Judopay Purchase Request
  */
-class PreAuthorizationRequest extends AbstractRequest
+class VoidRequest extends AbstractRequest
 {
 
     public function getApiToken()
@@ -50,39 +50,12 @@ class PreAuthorizationRequest extends AbstractRequest
         return $this->setParameter('useProduction', $value);
     }
 
-    public function getYourConsumerReference()
-    {
-        return $this->getParameter('yourConsumerReference');
-    }
-
-    public function setYourConsumerReference($value)
-    {
-        return $this->setParameter('yourConsumerReference', $value);
-    }
-
-    public function getYourPaymentReference()
-    {
-        return $this->getParameter('yourPaymentReference');
-    }
-
-    public function setYourPaymentReference($value)
-    {
-        return $this->setParameter('yourPaymentReference', $value);
-    }
-
     public function getData()
     {
-        $this->validate('amount');
-
         $data = array();
         $data['judoId'] = $this->getJudoId();
-        $data['yourConsumerReference'] = $this->getYourConsumerReference();
-        $data['yourPaymentReference'] = $this->getYourPaymentReference();
+        $data['receiptId'] = $this->getJudoId();
         $data['amount'] = $this->getAmountInteger();
-        $data['currency'] = $this->getCurrency();
-        $data['cardNumber'] = $this->getCard()->getNumber();
-        $data['expiryDate'] = $this->getCard()->getExpiryDate('m/y');
-        $data['cv2'] = $this->getCard()->getCvv();
 
         return $data;
     }
@@ -98,11 +71,11 @@ class PreAuthorizationRequest extends AbstractRequest
             )
         );
 
-        $preauth = $judopay->getModel('Preauth');
-        $preauth->setAttributeValues($data);
+        $saveCard = $judopay->getModel('Void');
+        $saveCard->setAttributeValues($data);
 
         try {
-            $response = $preauth->create();
+            $response = $saveCard->create();
             if ($response['result'] === 'Success') {
                 return $this->createResponse($response);
             } else {
@@ -119,6 +92,6 @@ class PreAuthorizationRequest extends AbstractRequest
     }
 
     public function createResponse($response){
-        return $this->response = new PreAuthorizationResponse($this, $response);
+        return $this->response = new VoidResponse($this, $response);
     }
 }

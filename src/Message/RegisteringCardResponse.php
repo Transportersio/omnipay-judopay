@@ -8,7 +8,7 @@ use Omnipay\Common\Message\RedirectResponseInterface;
 /**
  * Judopay Purchase Response
  */
-class PreAuthorizationResponse extends AbstractResponse implements RedirectResponseInterface
+class RegisteringCardResponse extends AbstractResponse implements RedirectResponseInterface
 {
     public function isSuccessful()
     {

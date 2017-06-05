@@ -9,10 +9,17 @@ class PurchaseRequestTest extends TestCase
     protected function setUp()
     {
         $this->request = new PurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
+
+        $formData = array('number' => '4976000000003436', 'expiryMonth' => '12', 'expiryYear' => '2022', 'cvv' => '452');
+
         $this->request->initialize(
             array(
+                'yourConsumerReference' => '12345',
+                'yourPaymentReference' => '12345',
+                'yourPaymentMetaData' => array(),
                 'amount' => '10.00',
-                'returnUrl' => 'https://example.com/return',
+                'card' => $formData,
+                'returnUrl' => 'https://example.com/return'
             )
         );
     }
@@ -21,31 +28,27 @@ class PurchaseRequestTest extends TestCase
     {
         $this->request->initialize(
             array(
-                'installationId' => 'id1',
-                'accountId' => 'id2',
-                'transactionId' => 'id3',
-                'description' => 'food',
-                'amount' => '12.00',
+                'judoId' => '123-456',
+                'yourConsumerReference' => '12345',
+                'yourPaymentReference' => '12345',
+                'amount' => '10.00',
                 'currency' => 'GBP',
-                'returnUrl' => 'https://example.com/return',
-                'signatureFields' => 'instId:amount:currency',
-                'secretWord' => 'such-secret-wow'
+                'cardNumber' => '4976000000003436',
+                'expiryDate' => '12/22',
+                'cv2' => '452'
             )
         );
 
         $data = $this->request->getData();
 
-        $this->assertSame('id1', $data['instId']);
-        $this->assertSame('id2', $data['accId1']);
-        $this->assertSame('id3', $data['cartId']);
-        $this->assertSame('food', $data['desc']);
-        $this->assertSame('12.00', $data['amount']);
+        $this->assertSame('123-456', $data['judoId']);
+        $this->assertSame('12345', $data['yourConsumerReference']);
+        $this->assertSame('12345', $data['yourPaymentReference']);
+        $this->assertSame('10.00', $data['amount']);
         $this->assertSame('GBP', $data['currency']);
-        $this->assertSame(0, $data['testMode']);
-        $this->assertSame('https://example.com/return', $data['MC_callback']);
-        $this->assertSame('instId:amount:currency', $data['signatureFields']);
-        $this->assertInternalType('string', $data['signature']);
-        $this->assertEquals(32, strlen($data['signature']));
+        $this->assertSame('4976000000003436', $data['cardNumber']);
+        $this->assertSame('12/22', $data['expiryDate']);
+        $this->assertSame('452', $data['cv2']);
     }
 
     public function testGetDataTestMode()

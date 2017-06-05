@@ -7,7 +7,7 @@ use Omnipay\Common\Message\AbstractRequest;
 /**
  * Judopay Purchase Request
  */
-class PreAuthorizationRequest extends AbstractRequest
+class RegisteringCardRequest extends AbstractRequest
 {
 
     public function getApiToken()
@@ -98,11 +98,11 @@ class PreAuthorizationRequest extends AbstractRequest
             )
         );
 
-        $preauth = $judopay->getModel('Preauth');
-        $preauth->setAttributeValues($data);
+        $registerCard = $judopay->getModel('RegisterCard');
+        $registerCard->setAttributeValues($data);
 
         try {
-            $response = $preauth->create();
+            $response = $registerCard->create();
             if ($response['result'] === 'Success') {
                 return $this->createResponse($response);
             } else {
@@ -119,6 +119,6 @@ class PreAuthorizationRequest extends AbstractRequest
     }
 
     public function createResponse($response){
-        return $this->response = new PreAuthorizationResponse($this, $response);
+        return $this->response = new RegisteringCardResponse($this, $response);
     }
 }
