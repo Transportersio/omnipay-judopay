@@ -70,6 +70,16 @@ class WebPaymentRequest extends AbstractRequest
         return $this->setParameter('yourPaymentReference', $value);
     }
 
+    public function getYourPaymentMetaData()
+    {
+        return $this->getParameter('yourPaymentMetaData');
+    }
+
+    public function setYourPaymentMetaData($value)
+    {
+        return $this->setParameter('yourPaymentMetaData', $value);
+    }
+
 
     public function getData()
     {
@@ -79,6 +89,7 @@ class WebPaymentRequest extends AbstractRequest
         $data['judoId'] = $this->getJudoId();
         $data['yourConsumerReference'] = $this->getYourConsumerReference();
         $data['yourPaymentReference'] = $this->getYourPaymentReference();
+        $data['yourPaymentMetaData'] = $this->getYourPaymentMetaData();
         $data['amount'] = $this->getAmount();
         $data['currency'] = $this->getCurrency();
         $data['clientIpAddress'] = $this->getRealIpAddr();
