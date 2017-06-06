@@ -75,7 +75,7 @@ class Gateway extends AbstractGateway
     }
 
     public function purchase(array $parameters = array()){
-        return $this->createRequest('\Omnipay\Judopay\Message\PaymentRequest', $parameters);
+        return $this->createRequest('\Omnipay\Judopay\Message\WebPaymentRequest', $parameters);
     }
 
     public function refund(array $parameters = array())
