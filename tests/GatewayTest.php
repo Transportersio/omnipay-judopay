@@ -1,6 +1,6 @@
 <?php
 
-namespace Transportersio\OmnipayJudopay;
+namespace Omnipay\Judopay;
 
 use Omnipay\Tests\GatewayTestCase;
 

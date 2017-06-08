@@ -1,6 +1,6 @@
 <?php
 
-namespace Transportersio\OmnipayJudopay;
+namespace Omnipay\Judopay;
 
 use Omnipay\Common\AbstractGateway;
 use Judopay;
@@ -71,36 +71,36 @@ class Gateway extends AbstractGateway
 
     public function authorize(array $parameters = array())
     {
-        return $this->createRequest('\Transportersio\OmnipayJudopay\Message\PreAuthorizationRequest', $parameters);
+        return $this->createRequest('\Omnipay\Judopay\Message\PreAuthorizationRequest', $parameters);
     }
 
     public function purchase(array $parameters = array())
     {
-        return $this->createRequest('\Transportersio\OmnipayJudopay\Message\WebPaymentRequest', $parameters);
+        return $this->createRequest('\Omnipay\Judopay\Message\WebPaymentRequest', $parameters);
     }
 
     public function completePurchase(array $parameters = array())
     {
-        return $this->createRequest('\Transportersio\OmnipayJudopay\Message\TransactionRequest', $parameters);
+        return $this->createRequest('\Omnipay\Judopay\Message\TransactionRequest', $parameters);
     }
 
     public function refund(array $parameters = array())
     {
-        return $this->createRequest('\Transportersio\OmnipayJudopay\Message\RefundRequest', $parameters);
+        return $this->createRequest('\Omnipay\Judopay\Message\RefundRequest', $parameters);
     }
 
     public function void(array $parameters = array())
     {
-        return $this->createRequest('\Transportersio\OmnipayJudopay\Message\VoidRequest', $parameters);
+        return $this->createRequest('\Omnipay\Judopay\Message\VoidRequest', $parameters);
     }
 
     public function createCard(array $parameters = array())
     {
-        return $this->createRequest('\Transportersio\OmnipayJudopay\Message\RegisteringCardRequest', $parameters);
+        return $this->createRequest('\Omnipay\Judopay\Message\RegisteringCardRequest', $parameters);
     }
 
     public function updateCard(array $parameters = array())
     {
-        return $this->createRequest('\Transportersio\OmnipayJudopay\Message\SaveCardRequest', $parameters);
+        return $this->createRequest('\Omnipay\Judopay\Message\SaveCardRequest', $parameters);
     }
 }

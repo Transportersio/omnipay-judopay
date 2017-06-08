@@ -23,7 +23,7 @@
         }
     ],
     "autoload": {
-        "psr-4": { "Transportersio\\OmnipayJudopay\\" : "src/" }
+        "psr-4": { "Omnipay\\Judopay\\" : "src/" }
     },
     "require": {
         "omnipay/common": "~2.0",
