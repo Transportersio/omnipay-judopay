@@ -1,5 +1,5 @@
 {
-    "name": "transportersio/OmnipayJudopay",
+    "name": "transportersio/omnipay-judopay",
     "type": "library",
     "description": "Judopay driver for the Omnipay payment processing library",
     "keywords": [
