@@ -93,7 +93,12 @@ class WebPaymentRequest extends AbstractRequest
         $data['amount'] = $this->getAmount();
         $data['currency'] = $this->getCurrency();
         $data['clientIpAddress'] = $this->getRealIpAddr();
-        $data['clientUserAgent'] = $_SERVER['HTTP_USER_AGENT'];
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+            $data['clientUserAgent'] = $_SERVER['HTTP_USER_AGENT'];
+        } else {
+            $data['clientUserAgent'] = "";
+        }
+
 
         return $data;
     }
@@ -106,8 +111,10 @@ class WebPaymentRequest extends AbstractRequest
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             //to check ip is pass from proxy
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
+        } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
             $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ip = "";
         }
         return $ip;
     }

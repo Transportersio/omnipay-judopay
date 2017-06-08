@@ -3,9 +3,9 @@
 **Judopay driver for the Omnipay PHP payment processing library**
 
 [![Build Status](https://travis-ci.org/Transportersio/omnipay-judopay.png?branch=master)](https://travis-ci.org/Transportersio/omnipay-judopay)
-[![Latest Stable Version](https://poser.pugx.org/Transportersio/omnipay-judopay/version.png)](https://packagist.org/packages/Transportersio/omnipay-judopay)
-[![Total Downloads](https://poser.pugx.org/Transportersio/omnipay-judopay/d/total.png)](https://packagist.org/packages/Transportersio/omnipay-judopay)
-[![License](https://poser.pugx.org/Transportersio/omnipay-judopay/license)](https://packagist.org/packages/Transportersio/omnipay-judopay)
+[![Latest Stable Version](https://poser.pugx.org/transportersio/omnipay-judopay/version.png)](https://packagist.org/packages/transportersio/omnipay-judopay)
+[![Total Downloads](https://poser.pugx.org/transportersio/omnipay-judopay/d/total.png)](https://packagist.org/packages/transportersio/omnipay-judopay)
+[![License](https://poser.pugx.org/transportersio/omnipay-judopay/license)](https://packagist.org/packages/transportersio/omnipay-judopay)
 
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment
 processing library for PHP 5.3+. This package implements Judopay support for Omnipay.
@@ -18,7 +18,7 @@ to your `composer.json` file:
 ```json
 {
     "require": {
-        "transportersio/OmnipayJudopay": "~0.0.2"
+        "transportersio/omnipay-judopay": "~0.0.2"
     }
 }
 ```
