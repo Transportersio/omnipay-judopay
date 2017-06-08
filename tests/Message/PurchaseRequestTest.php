@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\WorldPay\Message;
+namespace Transportersio\OmnipayJudopay\Message;
 
 use Omnipay\Tests\TestCase;
 
