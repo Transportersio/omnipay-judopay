@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\WorldPay\Message;
+namespace transportersio\OmnipayJudopay\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RedirectResponseInterface;
