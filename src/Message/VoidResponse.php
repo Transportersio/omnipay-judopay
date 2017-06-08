@@ -27,7 +27,6 @@ class VoidResponse extends AbstractResponse implements RedirectResponseInterface
     public function getRedirectUrl()
     {
         return true;
-        //return $this->getRequest()->getEndpoint().'?'.http_build_query($this->data);
     }
 
     public function getRedirectMethod()
