@@ -118,7 +118,8 @@ class RegisteringCardRequest extends AbstractRequest
 
     }
 
-    public function createResponse($response){
+    public function createResponse($response)
+    {
         return $this->response = new RegisteringCardResponse($this, $response);
     }
 }

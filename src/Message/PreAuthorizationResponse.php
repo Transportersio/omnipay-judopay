@@ -12,9 +12,9 @@ class PreAuthorizationResponse extends AbstractResponse implements RedirectRespo
 {
     public function isSuccessful()
     {
-        if($this->data['result'] == 'Success'){
+        if ($this->data['result'] == 'Success') {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

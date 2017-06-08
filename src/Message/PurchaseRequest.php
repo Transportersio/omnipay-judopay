@@ -158,11 +158,11 @@ class PurchaseRequest extends AbstractRequest
         $data['testMode'] = $this->getTestMode() ? 100 : 0;
         $data['MC_callback'] = $this->getNotifyUrl() ?: $this->getReturnUrl();
         $data['MC_returnurl'] = $this->getReturnUrl();
-        $data['paymentType'] = $this -> getPaymentType();
-        $data['noLanguageMenu'] = $this -> getNoLanguageMenu();
-        $data['fixContact'] = $this -> getFixContact();
-        $data['hideContact'] = $this -> getHideContact();
-        $data['hideCurrency'] = $this -> getHideCurrency();
+        $data['paymentType'] = $this->getPaymentType();
+        $data['noLanguageMenu'] = $this->getNoLanguageMenu();
+        $data['fixContact'] = $this->getFixContact();
+        $data['hideContact'] = $this->getHideContact();
+        $data['hideCurrency'] = $this->getHideCurrency();
 
         if ($this->getCard()) {
             $data['name'] = $this->getCard()->getName();

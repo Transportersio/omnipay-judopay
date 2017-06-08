@@ -119,7 +119,8 @@ class TransactionRequest extends AbstractRequest
 
     }
 
-    public function createResponse($response){
+    public function createResponse($response)
+    {
         return $this->response = new TransactionResponse($this, $response);
     }
 }

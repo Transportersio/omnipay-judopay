@@ -116,7 +116,8 @@ class PaymentRequest extends AbstractRequest
 
     }
 
-    public function createResponse($response){
+    public function createResponse($response)
+    {
         return $this->response = new PaymentResponse($this, $response);
     }
 }

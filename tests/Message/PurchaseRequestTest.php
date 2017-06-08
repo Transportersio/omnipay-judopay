@@ -10,7 +10,12 @@ class PurchaseRequestTest extends TestCase
     {
         $this->request = new PurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
 
-        $formData = array('number' => '4976000000003436', 'expiryMonth' => '12', 'expiryYear' => '2022', 'cvv' => '452');
+        $formData = array(
+            'number' => '4976000000003436',
+            'expiryMonth' => '12',
+            'expiryYear' => '2022',
+            'cvv' => '452'
+        );
 
         $this->request->initialize(
             array(

@@ -13,9 +13,9 @@ class PaymentResponse extends AbstractResponse implements RedirectResponseInterf
 
     public function isSuccessful()
     {
-        if($this->data['result'] == 'Success'){
+        if ($this->data['result'] == 'Success') {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

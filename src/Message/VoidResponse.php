@@ -12,9 +12,9 @@ class VoidResponse extends AbstractResponse implements RedirectResponseInterface
 {
     public function isSuccessful()
     {
-        if($this->data['result'] == 'Success'){
+        if ($this->data['result'] == 'Success') {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

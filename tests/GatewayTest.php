@@ -16,7 +16,12 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->setJudoId('123-456');
         $this->gateway->setUseProduction(false);
 
-        $formData = array('number' => '4976000000003436', 'expiryMonth' => '12', 'expiryYear' => '2022', 'cvv' => '452');
+        $formData = array(
+            'number' => '4976000000003436',
+            'expiryMonth' => '12',
+            'expiryYear' => '2022',
+            'cvv' => '452'
+        );
 
         $this->options = array(
             'yourConsumerReference' => '12345',

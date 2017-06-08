@@ -13,9 +13,9 @@ class WebPaymentResponse extends AbstractResponse implements RedirectResponseInt
 
     public function isSuccessful()
     {
-        if($this->data['reference']){
+        if ($this->data['reference']) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

@@ -118,7 +118,8 @@ class PreAuthorizationRequest extends AbstractRequest
 
     }
 
-    public function createResponse($response){
+    public function createResponse($response)
+    {
         return $this->response = new PreAuthorizationResponse($this, $response);
     }
 }

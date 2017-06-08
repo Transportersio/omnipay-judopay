@@ -91,7 +91,8 @@ class VoidRequest extends AbstractRequest
 
     }
 
-    public function createResponse($response){
+    public function createResponse($response)
+    {
         return $this->response = new VoidResponse($this, $response);
     }
 }
