@@ -103,5 +103,4 @@ class Gateway extends AbstractGateway
     {
         return $this->createRequest('\Omnipay\Judopay\Message\SaveCardRequest', $parameters);
     }
-
 }

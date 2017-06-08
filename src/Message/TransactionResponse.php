@@ -18,12 +18,15 @@ class TransactionResponse extends AbstractResponse implements RedirectResponseIn
 
     public function isRedirect()
     {
-        return (isset($this->getRequest()->getParameters()['returnUrl']) && $this->getRequest()->getParameters()['returnUrl'] != '') ? true : false;
+        return (isset($this->getRequest()->getParameters()['returnUrl'])
+            && $this->getRequest()->getParameters()['returnUrl'] != '') ? true : false;
     }
 
     public function getRedirectUrl()
     {
-        return (isset($this->getRequest()->getParameters()['returnUrl']) && $this->getRequest()->getParameters()['returnUrl'] != '') ? $this->getRequest()->getParameters()['returnUrl'] : false;
+        return (isset($this->getRequest()->getParameters()['returnUrl'])
+            && $this->getRequest()->getParameters()['returnUrl'] != '')
+            ? $this->getRequest()->getParameters()['returnUrl'] : false;
     }
 
     public function getRedirectMethod()
