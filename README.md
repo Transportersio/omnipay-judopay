@@ -18,7 +18,7 @@ to your `composer.json` file:
 ```json
 {
     "require": {
-        "omnipay/Judopay": "~2.0"
+        "transportersio/omnipay-judopay": "~0.0.2"
     }
 }
 ```
