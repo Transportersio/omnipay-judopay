@@ -1,6 +1,6 @@
 <?php
 
-namespace transportersio\OmnipayJudopay\Message;
+namespace Transportersio\OmnipayJudopay\Message;
 
 use Omnipay\Common\Message\AbstractRequest;
 
