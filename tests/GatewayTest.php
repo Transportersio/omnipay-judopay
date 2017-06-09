@@ -15,7 +15,6 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->setApiToken('jwmXGbpb87xvDM4B');
         $this->gateway->setApiSecret('601dc0a93d2752f5041bdb9a53dc1bf0b4e8ef0f1b03f737416fcf3be1a20b7d');
         $this->gateway->setJudoId('100826-205');
-        $this->gateway->setUseProduction(false);
 
         $this->options = array(
             'yourConsumerReference' => '12345',
