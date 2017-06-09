@@ -40,7 +40,5 @@ class WebPaymentRequestTest extends TestCase
         $this->request->setTestMode(true);
 
         $data = $this->request->getData();
-
-        $this->assertSame(100, $data['testMode']);
     }
 }
