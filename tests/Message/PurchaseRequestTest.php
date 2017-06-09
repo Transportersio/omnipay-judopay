@@ -4,11 +4,11 @@ namespace Omnipay\Judopay\Message;
 
 use Omnipay\Tests\TestCase;
 
-class PaymentRequestTest extends TestCase
+class WebPaymentRequestTest extends TestCase
 {
     protected function setUp()
     {
-        $this->request = new PaymentRequest($this->getHttpClient(), $this->getHttpRequest());
+        $this->request = new WebPaymentRequest($this->getHttpClient(), $this->getHttpRequest());
 
         $this->request->initialize(
             array(
