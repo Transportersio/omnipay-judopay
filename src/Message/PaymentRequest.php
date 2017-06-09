@@ -40,16 +40,6 @@ class PaymentRequest extends AbstractRequest
         return $this->setParameter('judoId', $value);
     }
 
-    public function getUseProduction()
-    {
-        return $this->getParameter('useProduction');
-    }
-
-    public function setUseProduction($value)
-    {
-        return $this->setParameter('useProduction', $value);
-    }
-
     public function getYourConsumerReference()
     {
         return $this->getParameter('yourConsumerReference');
@@ -95,7 +85,7 @@ class PaymentRequest extends AbstractRequest
                 'apiToken' => $this->getApiToken(),
                 'apiSecret' => $this->getApiSecret(),
                 'judoId' => $this->getJudoId(),
-                'useProduction' => $this->getUseProduction()
+                'useProduction' => ($this->getTestMode() > 0) ? false : true
             )
         );
 

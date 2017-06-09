@@ -25,7 +25,7 @@ class Gateway extends AbstractGateway
             'apiToken' => '',
             'apiSecret' => '',
             'judoId' => '',
-            'useProduction' => false
+            'testMode' => false
         );
     }
 
@@ -57,16 +57,6 @@ class Gateway extends AbstractGateway
     public function setJudoId($value)
     {
         return $this->setParameter('judoId', $value);
-    }
-
-    public function getUseProduction()
-    {
-        return $this->getParameter('useProduction');
-    }
-
-    public function setUseProduction($value)
-    {
-        return $this->setParameter('useProduction', $value);
     }
 
     public function authorize(array $parameters = array())
