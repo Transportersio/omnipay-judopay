@@ -72,17 +72,17 @@ class WebPaymentRequest extends AbstractRequest
 
     public function getSuccessUrl()
     {
-        return $this->getParameter('yourPaymentMetaData');
+        return $this->getParameter('successUrl');
     }
 
     public function setSuccessUrl($value)
     {
-        return $this->setParameter('yourPaymentMetaData', $value);
+        return $this->setParameter('successUrl', $value);
     }
 
     public function getCancelUrl()
     {
-        return $this->getParameter('successUrl');
+        return $this->getParameter('cancelUrl');
     }
 
     public function setCancelUrl($value)
