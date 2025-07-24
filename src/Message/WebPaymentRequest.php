@@ -70,6 +70,26 @@ class WebPaymentRequest extends AbstractRequest
         return $this->setParameter('yourPaymentMetaData', $value);
     }
 
+    public function getSuccessUrl()
+    {
+        return $this->getParameter('yourPaymentMetaData');
+    }
+
+    public function setSuccessUrl($value)
+    {
+        return $this->setParameter('yourPaymentMetaData', $value);
+    }
+
+    public function getCancelUrl()
+    {
+        return $this->getParameter('successUrl');
+    }
+
+    public function setCancelUrl($value)
+    {
+        return $this->setParameter('cancelUrl', $value);
+    }
+
 
     public function getData()
     {
@@ -80,6 +100,8 @@ class WebPaymentRequest extends AbstractRequest
         $data['yourConsumerReference'] = $this->getYourConsumerReference();
         $data['yourPaymentReference'] = $this->getYourPaymentReference();
         $data['yourPaymentMetaData'] = $this->getYourPaymentMetaData();
+        $data['successUrl'] = $this->getSuccessUrl();
+        $data['cancelUrl'] = $this->getCancelUrl();
         $data['amount'] = $this->getAmount();
         $data['currency'] = $this->getCurrency();
         $data['clientIpAddress'] = $this->getRealIpAddr();
