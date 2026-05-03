@@ -26,15 +26,16 @@
         "psr-4": { "Omnipay\\Judopay\\" : "src/" }
     },
     "require": {
+        "php": "^7.4|^8.0",
         "omnipay/common": "~3.0",
-        "judopay/judopay-sdk": "~5.0"
+        "guzzlehttp/guzzle": "^6.5|^7.0"
     },
     "require-dev": {
         "omnipay/tests": "~3.0"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "3.0.x-dev"
         }
     }
 }

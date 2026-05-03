@@ -5,40 +5,18 @@ namespace Omnipay\Judopay\Message;
 use Omnipay\Common\Message\AbstractRequest;
 
 /**
- * Judopay Purchase Request
+ * Judopay hosted Web Payment session create.
+ *
+ * Returns a `postUrl` (or similar) the caller redirects the customer to.
+ * The customer enters card details on Judopay's hosted page; on
+ * completion Judopay calls back to `successUrl` / `cancelUrl` and the
+ * caller can fetch the receipt via TransactionRequest.
+ *
+ * Endpoint: POST webpayments/payments.
  */
 class WebPaymentRequest extends AbstractRequest
 {
-
-    public function getApiToken()
-    {
-        return $this->getParameter('apiToken');
-    }
-
-    public function setApiToken($value)
-    {
-        return $this->setParameter('apiToken', $value);
-    }
-
-    public function getApiSecret()
-    {
-        return $this->getParameter('apiSecret');
-    }
-
-    public function setApiSecret($value)
-    {
-        return $this->setParameter('apiSecret', $value);
-    }
-
-    public function getJudoId()
-    {
-        return $this->getParameter('judoId');
-    }
-
-    public function setJudoId($value)
-    {
-        return $this->setParameter('judoId', $value);
-    }
+    use JudopayClientTrait;
 
     public function getYourConsumerReference()
     {
@@ -90,77 +68,39 @@ class WebPaymentRequest extends AbstractRequest
         return $this->setParameter('cancelUrl', $value);
     }
 
-
     public function getData()
     {
         $this->validate('amount');
 
-        $data = array();
-        $data['judoId'] = $this->getJudoId();
-        $data['yourConsumerReference'] = $this->getYourConsumerReference();
-        $data['yourPaymentReference'] = $this->getYourPaymentReference();
-        $data['yourPaymentMetaData'] = $this->getYourPaymentMetaData();
-        $data['successUrl'] = $this->getSuccessUrl();
-        $data['cancelUrl'] = $this->getCancelUrl();
-        $data['amount'] = $this->getAmount();
-        $data['currency'] = $this->getCurrency();
-        $data['clientIpAddress'] = $this->getRealIpAddr();
-        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
-            $data['clientUserAgent'] = $_SERVER['HTTP_USER_AGENT'];
-        } else {
-            $data['clientUserAgent'] = "";
-        }
-
-
-        return $data;
+        return [
+            'judoId'                => $this->getJudoId(),
+            'yourConsumerReference' => $this->getYourConsumerReference(),
+            'yourPaymentReference'  => $this->getYourPaymentReference(),
+            'yourPaymentMetaData'   => $this->getYourPaymentMetaData(),
+            'successUrl'            => $this->getSuccessUrl(),
+            'cancelUrl'             => $this->getCancelUrl(),
+            'amount'                => $this->getAmount(),
+            'currency'              => $this->getCurrency(),
+            'clientIpAddress'       => $this->getRealIpAddr(),
+            'clientUserAgent'       => $_SERVER['HTTP_USER_AGENT'] ?? '',
+        ];
     }
 
     public function getRealIpAddr()
     {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            //check ip from share internet
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            //to check ip is pass from proxy
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        } else {
-            $ip = "";
+            // shared internet
+            return $_SERVER['HTTP_CLIENT_IP'];
         }
-        return $ip;
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // proxy forward
+            return $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        return $_SERVER['REMOTE_ADDR'] ?? '';
     }
 
     public function sendData($data)
     {
-        $judopay = new \Judopay(
-            array(
-                'apiToken' => $this->getApiToken(),
-                'apiSecret' => $this->getApiSecret(),
-                'judoId' => $this->getJudoId(),
-                'useProduction' => ($this->getTestMode() > 0) ? false : true
-            )
-        );
-
-        $webpayment = $judopay->getModel('WebPayments\Payment');
-        $webpayment->setAttributeValues($data);
-
-        try {
-            $response = $webpayment->create();
-            return $this->createResponse($response);
-        } catch (\Judopay\Exception\ValidationError $e) {
-            echo $e->getSummary();
-        } catch (\Judopay\Exception\ApiException $e) {
-            echo $e->getSummary();
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
-
-
-    }
-
-    public function createResponse($response)
-    {
-        return $this->response = new WebPaymentResponse($this, $response);
+        return $this->postTo('webpayments/payments', $data, WebPaymentResponse::class);
     }
 }

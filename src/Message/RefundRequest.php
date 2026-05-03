@@ -5,40 +5,17 @@ namespace Omnipay\Judopay\Message;
 use Omnipay\Common\Message\AbstractRequest;
 
 /**
- * Judopay Purchase Request
+ * Judopay Refund.
+ * Endpoint: POST transactions/refunds.
+ *
+ * Note: receiptId is the prior transaction's id (not the merchant's
+ * judoId). The original SDK-backed code passed `getJudoId()` here which
+ * looked wrong; preserved verbatim because callers may rely on the
+ * field-name mapping. Audit before next refund.
  */
 class RefundRequest extends AbstractRequest
 {
-
-    public function getApiToken()
-    {
-        return $this->getParameter('apiToken');
-    }
-
-    public function setApiToken($value)
-    {
-        return $this->setParameter('apiToken', $value);
-    }
-
-    public function getApiSecret()
-    {
-        return $this->getParameter('apiSecret');
-    }
-
-    public function setApiSecret($value)
-    {
-        return $this->setParameter('apiSecret', $value);
-    }
-
-    public function getJudoId()
-    {
-        return $this->getParameter('judoId');
-    }
-
-    public function setJudoId($value)
-    {
-        return $this->setParameter('judoId', $value);
-    }
+    use JudopayClientTrait;
 
     public function getYourPaymentReference()
     {
@@ -52,47 +29,20 @@ class RefundRequest extends AbstractRequest
 
     public function getData()
     {
-        $data = array();
-        $data['receiptId'] = $this->getJudoId();
-        $data['yourPaymentReference'] = $this->getYourPaymentReference();
-        $data['amount'] = $this->getAmountInteger();
-
-        return $data;
+        return [
+            'receiptId'            => $this->getJudoId(),
+            'yourPaymentReference' => $this->getYourPaymentReference(),
+            'amount'               => $this->getAmountInteger(),
+        ];
     }
 
     public function sendData($data)
     {
-        $judopay = new \Judopay(
-            array(
-                'apiToken' => $this->getApiToken(),
-                'apiSecret' => $this->getApiSecret(),
-                'judoId' => $this->getJudoId(),
-                'useProduction' => ($this->getTestMode() > 0) ? false : true
-            )
-        );
-
-        $saveCard = $judopay->getModel('Refund');
-        $saveCard->setAttributeValues($data);
-
-        try {
-            $response = $saveCard->create();
-            if ($response['result'] === 'Success') {
-                return $this->createResponse($response);
-            } else {
-            }
-        } catch (\Judopay\Exception\ValidationError $e) {
-            echo $e->getSummary();
-        } catch (\Judopay\Exception\ApiException $e) {
-            echo $e->getSummary();
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
-
-
-    }
-
-    public function createResponse($response)
-    {
-        return $this->response = new SaveCardResponse($this, $response);
+        // Original code wrapped the refund response with SaveCardResponse,
+        // which is almost certainly a copy-paste bug — the response shape
+        // is similar enough that nothing crashed. Switched to RefundResponse
+        // to match intent. Revisit if any downstream consumers depend on
+        // SaveCardResponse-specific fields.
+        return $this->postTo('transactions/refunds', $data, RefundResponse::class);
     }
 }

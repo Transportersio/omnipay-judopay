@@ -5,40 +5,14 @@ namespace Omnipay\Judopay\Message;
 use Omnipay\Common\Message\AbstractRequest;
 
 /**
- * Judopay Purchase Request
+ * Judopay Pre-Authorization
+ *
+ * Reserves funds without immediate capture. Endpoint: POST transactions/preauths.
+ * Capture later via a Collection (omnipay capture()) or release via Void.
  */
 class PreAuthorizationRequest extends AbstractRequest
 {
-
-    public function getApiToken()
-    {
-        return $this->getParameter('apiToken');
-    }
-
-    public function setApiToken($value)
-    {
-        return $this->setParameter('apiToken', $value);
-    }
-
-    public function getApiSecret()
-    {
-        return $this->getParameter('apiSecret');
-    }
-
-    public function setApiSecret($value)
-    {
-        return $this->setParameter('apiSecret', $value);
-    }
-
-    public function getJudoId()
-    {
-        return $this->getParameter('judoId');
-    }
-
-    public function setJudoId($value)
-    {
-        return $this->setParameter('judoId', $value);
-    }
+    use JudopayClientTrait;
 
     public function getYourConsumerReference()
     {
@@ -64,52 +38,20 @@ class PreAuthorizationRequest extends AbstractRequest
     {
         $this->validate('amount');
 
-        $data = array();
-        $data['judoId'] = $this->getJudoId();
-        $data['yourConsumerReference'] = $this->getYourConsumerReference();
-        $data['yourPaymentReference'] = $this->getYourPaymentReference();
-        $data['amount'] = $this->getAmountInteger();
-        $data['currency'] = $this->getCurrency();
-        $data['cardNumber'] = $this->getCard()->getNumber();
-        $data['expiryDate'] = $this->getCard()->getExpiryDate('m/y');
-        $data['cv2'] = $this->getCard()->getCvv();
-
-        return $data;
+        return [
+            'judoId'                => $this->getJudoId(),
+            'yourConsumerReference' => $this->getYourConsumerReference(),
+            'yourPaymentReference'  => $this->getYourPaymentReference(),
+            'amount'                => $this->getAmountInteger(),
+            'currency'              => $this->getCurrency(),
+            'cardNumber'            => $this->getCard()->getNumber(),
+            'expiryDate'            => $this->getCard()->getExpiryDate('m/y'),
+            'cv2'                   => $this->getCard()->getCvv(),
+        ];
     }
 
     public function sendData($data)
     {
-        $judopay = new \Judopay(
-            array(
-                'apiToken' => $this->getApiToken(),
-                'apiSecret' => $this->getApiSecret(),
-                'judoId' => $this->getJudoId(),
-                'useProduction' => ($this->getTestMode() > 0) ? false : true
-            )
-        );
-
-        $preauth = $judopay->getModel('Preauth');
-        $preauth->setAttributeValues($data);
-
-        try {
-            $response = $preauth->create();
-            if ($response['result'] === 'Success') {
-                return $this->createResponse($response);
-            } else {
-            }
-        } catch (\Judopay\Exception\ValidationError $e) {
-            echo $e->getSummary();
-        } catch (\Judopay\Exception\ApiException $e) {
-            echo $e->getSummary();
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
-
-
-    }
-
-    public function createResponse($response)
-    {
-        return $this->response = new PreAuthorizationResponse($this, $response);
+        return $this->postTo('transactions/preauths', $data, PreAuthorizationResponse::class);
     }
 }
